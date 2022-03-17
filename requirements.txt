@@ -1,0 +1,6 @@
+colorama
+requests
+tqdm
+python-magic-bin
+pyunpack
+patool
