@@ -20,7 +20,7 @@ if __name__ == '__main__':
                                help='Specify a platform to search.')
     search_parser.set_defaults(action='search')
     download_parser = sub_parsers.add_parser('download')
-    download_parser.add_argument('gid', type=int, help='ID of the ROM provided from the search command.')
+    download_parser.add_argument('gid', nargs='+', help='ID of the ROM provided from the search command.')
     download_parser.add_argument('-d', '--directory', help='The ROMs save directory. (overrides default directory)')
     download_parser.set_defaults(action='download')
     settings_parser = sub_parsers.add_parser('settings')
@@ -72,7 +72,9 @@ if __name__ == '__main__':
         if args.directory:
             override = args.directory
 
-        downloader.download(args.gid, override=override)
+        for index, gid in enumerate(args.gid):
+            print(f"Starting download {index+1} of {len(args.gid)}")
+            downloader.download(gid, override=override)
 
     elif args.action == 'settings':
         if args.open:

@@ -2,5 +2,4 @@ colorama
 requests
 tqdm
 python-magic-bin
-pyunpack
-patool
+py7zr

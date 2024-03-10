@@ -13,10 +13,8 @@ Usage
   - colorama
   - requests
   - tqdm
-
-  - python-magic-bin (optional)
-  - pyunpack (optional)
-    - patool
+  - python-magic-bin
+  - py7zr
 
 ### Searching
 
@@ -24,7 +22,7 @@ You can search for games in the database files with the following commands.
 
 ```sh
 # Searches for castlevania in every platform.
-> python epw.py search castlevania
+python epw.py search castlevania
 
 # Output ...
 Searching: 100%|██████████████████████████████| 60/60 [00:00<00:00, 242.27it/s]
@@ -40,7 +38,7 @@ You can narrow the results by specifying a platform.
 
 ```sh
 # Only search the ps1 database.
-> python epw.py search castlevania --platform "Sony Playstation"
+python epw.py search castlevania --platform "Sony Playstation"
 
 # Output ...
 Showing 5 results for castlevania...
