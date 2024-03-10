@@ -52,7 +52,7 @@ Showing 5 results for castlevania...
 
 You can download the game by using the id provided from the search function on the far left in brackets. If you have
 `python-magic-bin` installed, you can extract `.zip` files after downloading. You can also extract `.7z` files if you
-`pyunpack` installed.
+`py7zr` installed.
 
 ```sh
 # Downloads the game with the id that search provided for us.
