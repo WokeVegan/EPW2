@@ -2,6 +2,7 @@ import configparser
 import os
 import pathlib
 import platform
+import subprocess
 
 import colorama
 
@@ -31,12 +32,13 @@ def open_in_editor():
     """
     Attempts to call the config file. On Windows, this will open the file in the default editor.
     """
-
     if platform.system() == 'Windows':
-        os.system(get_path())
+        subprocess.run([get_path()])
+    elif platform.system() == 'Linux':
+        subprocess.run(["xdg-open", get_path()])
     else:
         print(colorama.Fore.RED, end="")
-        print(f"This feature is only supported on Windows. Try manually opening '{get_path()}'")
+        print(f"This feature is not supported for '{platform.system()}'. Try manually opening '{get_path()}'")
         print(colorama.Fore.RESET)
 
 

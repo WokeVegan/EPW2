@@ -149,5 +149,10 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+# Poetry
+poetry.lock
+pyproject.toml
+
 # Specific
 settings.cfg
+ROMs/
