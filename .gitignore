@@ -151,7 +151,6 @@ fabric.properties
 
 # Poetry
 poetry.lock
-pyproject.toml
 
 # Specific
 settings.cfg
