@@ -23,6 +23,7 @@ def get_platform_by_gid(gid: int) -> Platform | None:
         plt.load()
         if str(gid) in plt:
             return plt
+    return None
 
 
 def get_all() -> Generator[str]:

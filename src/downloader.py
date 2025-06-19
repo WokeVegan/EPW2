@@ -52,11 +52,10 @@ def download(gid: int, chunk_size: int = 1024 * 2, override=None):
 
     print(f"File saved to '{file_destination}'.")
 
-    if extractor.ALLOW_EXTRACTION:
-        if not settings.get_auto_extract():
-            download_option = input(f"Would you like to extract the files? (Y/n): ")
+    if not settings.get_auto_extract():
+        download_option = input(f"Would you like to extract the files? (Y/n): ")
 
-            if download_option.lower() == "y":
-                extractor.extract_file(file_destination)
-        else:
+        if download_option.lower() == "y":
             extractor.extract_file(file_destination)
+    else:
+        extractor.extract_file(file_destination)

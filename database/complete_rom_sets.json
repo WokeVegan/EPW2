@@ -57,6 +57,9 @@
   "182713": "Game Boy Advance Part 5 (No Intro)",
   "182714": "Game Boy Advance Part 6 (No Intro)",
   "182715": "Game Boy Advance Part 7 (No Intro)",
+  "96325": "Nintendo Entertainment System (GoodNES v2.01)",
+  "96326": "Nintendo Entertainment System (GoodNES v3.14)",
+  "96333": "Super Nintendo - Famicom (GoodSNES 2.04)",
   "182716": "Game Boy Color (No Intro)",
   "182698": "GamePark - GP32 (No Intro)",
   "182699": "GCE - Vectrex (No Intro)",
@@ -201,5 +204,10 @@
   "182227": "Wii Sega Master System Set on Genesis Plus GX for Wii Homebrew",
   "182219": "Wii7800 (Atari 7800 Set) for Wii Homebrew",
   "182220": "WiiColEm (ColecoVision Set) for Wii Homebrew",
-  "96373": "ZX Spectrum"
+  "96373": "ZX Spectrum",
+  "96320": "Nintendo 64 (GoodN64v3.14) Part 01",
+  "96321": "Nintendo 64 (GoodN64v3.14) Part 02",
+  "96322": "Nintendo 64 (GoodN64v3.14) Part 03",
+  "96323": "Nintendo 64 (GoodN64v3.14) Part 04",
+  "96324": "Nintendo 64 (GoodN64v3.14) Part 05"
 }
