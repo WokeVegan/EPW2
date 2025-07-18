@@ -5,6 +5,7 @@ import platform
 import subprocess
 
 from src import database
+from src import utils
 
 
 def get_path() -> str:
@@ -30,8 +31,7 @@ def create_template(restore=False) -> None:
             return
 
     if restore:
-        answer = input("Restore the settings to default? (Y/n):")
-        if answer.lower() != "y":
+        if utils.prompt("Restore the settings to default?") == utils.ChoiceResponse.NO:
             return
 
     if not os.path.exists(get_default_directory()):

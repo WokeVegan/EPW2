@@ -35,7 +35,7 @@ def get_file_type(filename) -> FileType:
 
     read_size = max([len(x) for x in file_signatures.values()])
 
-    with open(filename, 'rb') as f:
+    with open(filename, "rb") as f:
         head = f.read(read_size)
 
         for file_type, signature in file_signatures.items():
@@ -82,6 +82,7 @@ def extract_file(zip_file, add_to_new_folder=False, delete_archive=True):
             patoolib.extract_archive(zip_file, extract_directory)
         except BaseException:
             print("Failed to extract rar file.")
+            delete_archive = False
     else:
         exit(f"Unsupported type: `{file_type}`")
 

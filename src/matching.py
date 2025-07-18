@@ -17,6 +17,7 @@ def get_size_label(size):
                 return value.format(size / key)
             except ZeroDivisionError:
                 return value.format(size)
+    return size
 
 
 def all_of_a_in_b(a: list[str], b: list[str], partial: bool) -> bool:
@@ -74,6 +75,7 @@ class MatchResult:
 def find_closest(
     search_term: list[str], plt: database.Platform, partial: bool
 ) -> list[MatchResult]:
+    # TODO Add fuzzy search
     matches = []
     plt.load()
 
