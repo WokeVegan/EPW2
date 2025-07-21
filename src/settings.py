@@ -25,13 +25,13 @@ def open_in_editor() -> None:
         subprocess.run(["xdg-open", get_path()])
 
 
-def create_template(restore=False) -> None:
+def create_template(restore: bool = False) -> None:
     if not restore:
         if os.path.exists(get_path()):
             return
 
     if restore:
-        if utils.prompt("Restore the settings to default?") == utils.ChoiceResponse.NO:
+        if utils.prompt("Restore the settings to default?", utils.ChoiceResponse.NO):
             return
 
     if not os.path.exists(get_default_directory()):
@@ -44,13 +44,13 @@ def create_template(restore=False) -> None:
 
     config = configparser.ConfigParser()
     config["directory"] = dir_template
-    config["general"] = {"auto_extract": "false"}
+    config["general"] = {"auto_extract": "false", "color_enabled": "true"}
 
     with open(get_path(), "w") as f:
         config.write(f)
 
     if restore:
-        print("Settings restored to default.")
+        utils.log("Settings restored to default.")
 
 
 def get_platform_path(plt: database.Platform) -> str:
@@ -73,3 +73,9 @@ def get_auto_extract() -> bool:
     config = configparser.ConfigParser()
     config.read(get_path())
     return config.getboolean("general", "auto_extract")
+
+
+def get_color_enabled() -> bool:
+    config = configparser.ConfigParser()
+    config.read(get_path())
+    return config.getboolean("general", "color_enabled")

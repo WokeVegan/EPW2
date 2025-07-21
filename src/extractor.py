@@ -2,6 +2,8 @@ import enum
 import os
 import zipfile
 
+from src import utils
+
 try:
     import py7zr
 
@@ -25,7 +27,7 @@ class FileType(enum.Enum):
     RAR5PLUS = enum.auto()
 
 
-def get_file_type(filename) -> FileType:
+def get_file_type(filename: str) -> FileType:
     file_signatures = {
         FileType.SEVEN_ZIP: bytes([0x37, 0x7A, 0xBC, 0xAF, 0x27, 0x1C]),
         FileType.ZIP: bytes([0x50, 0x4B, 0x03, 0x04]),
@@ -45,7 +47,9 @@ def get_file_type(filename) -> FileType:
     return FileType.UNKNOWN
 
 
-def extract_file(zip_file, add_to_new_folder=False, delete_archive=True):
+def extract_file(
+    zip_file: str, add_to_new_folder: bool = False, delete_archive: bool = True
+):
     """
     Detects the file type and extracts the data accordingly.
     """
@@ -61,7 +65,7 @@ def extract_file(zip_file, add_to_new_folder=False, delete_archive=True):
     if not os.path.exists(extract_directory):
         os.makedirs(extract_directory)
 
-    print(f"Attempting to extract {filename}...")
+    utils.log(f"Attempting to extract {filename}...")
 
     file_type = get_file_type(zip_file)
 
@@ -79,9 +83,9 @@ def extract_file(zip_file, add_to_new_folder=False, delete_archive=True):
         if not ALLOW_RAR:
             exit("rarfile is required to extract .rar files.")
         try:
-            patoolib.extract_archive(zip_file, extract_directory)
+            patoolib.extract_archive(zip_file, outdir=extract_directory)
         except BaseException:
-            print("Failed to extract rar file.")
+            utils.log("Failed to extract rar file.")
             delete_archive = False
     else:
         exit(f"Unsupported type: `{file_type}`")
@@ -89,4 +93,4 @@ def extract_file(zip_file, add_to_new_folder=False, delete_archive=True):
     if delete_archive:
         os.remove(zip_file)
 
-    print(f"Files extracted to '{extract_directory}'.")
+    utils.log(f"Files extracted to '{extract_directory}'.")

@@ -18,7 +18,7 @@ from src import settings
 from src import utils
 
 
-def download(gid: int, chunk_size: int = 1024 * 2, override=None):
+def download(gid: int, chunk_size: int = 1024 * 2, override: str = None):
     """
     Downloads game based on gid.
     """
@@ -41,13 +41,11 @@ def download(gid: int, chunk_size: int = 1024 * 2, override=None):
         os.makedirs(target_directory)
 
     if os.path.exists(file_destination):
-        if (
-            utils.prompt(
-                f"'{file_destination}' already exists. Are you sure you want to overwrite it?"
-            )
-            == utils.ChoiceResponse.NO
+        if utils.prompt(
+            f"'{file_destination}' already exists. Are you sure you want to overwrite it?",
+            utils.ChoiceResponse.NO,
         ):
-            print("Skipping...")
+            utils.log("Skipping...")
             return
 
     with Progress(
@@ -67,12 +65,11 @@ def download(gid: int, chunk_size: int = 1024 * 2, override=None):
                 progress.advance(task, advance=len(chunk))
                 f.write(chunk)
 
-    print(f"File saved to '{file_destination}'.")
+    utils.log(f"File saved to '{file_destination}'.")
 
     if not settings.get_auto_extract():
-        if (
-            utils.prompt("Would you like to extract the files?")
-            == utils.ChoiceResponse.YES
+        if utils.prompt(
+            "Would you like to extract the files?", utils.ChoiceResponse.YES
         ):
             extractor.extract_file(file_destination)
     else:

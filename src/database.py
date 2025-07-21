@@ -224,7 +224,7 @@ PLATFORM_OBJECTS = {
         "Sega Master System", "sega_master_system.json"
     ),
     PlatformID.SEGA_NAOMI: Platform("Sega Naomi", "sega_naomi.json"),
-    PlatformID.SEGA_SATURN: Platform("Sega Saturn", "sega_saturn.json"),
+    PlatformID.SEGA_SATURN: Platform("Sega Saturn", "sega_saturn.json", "saturn"),
     PlatformID.SHARP_X68000: Platform("Sharp X68000", "sharp_x68000.json"),
     PlatformID.SONY_PLAYSTATION: Platform(
         "Sony Playstation", "sony_playstation.json", "ps1", "ps", "psx"

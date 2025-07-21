@@ -1,23 +1,7 @@
 import colorama
 
-from src import database
-
-_SIZES = {
-    1000000000: "{:1.2f}GB",
-    1000000: "{0:02.2f}MB",
-    1000: "{:02.2f}KB",
-    0: "{:02d}B",
-}
-
-
-def get_size_label(size):
-    for key, value in _SIZES.items():
-        if size >= key:
-            try:
-                return value.format(size / key)
-            except ZeroDivisionError:
-                return value.format(size)
-    return size
+from src import database, utils
+from src import settings
 
 
 def all_of_a_in_b(a: list[str], b: list[str], partial: bool) -> bool:
@@ -46,10 +30,18 @@ class MatchResult:
         self.label = label
         self.platform = None
 
-    def pretty_print(self, keywords=None):
+    def pretty_print(self, keywords=None, nocolor=False):
         parts = []
 
-        print(f"[{colorama.Fore.CYAN}{self.gid}{colorama.Fore.RESET}] ", end="")
+        prefix = ""
+        suffix = ""
+        color_enabled = settings.get_color_enabled()
+
+        if color_enabled:
+            prefix = colorama.Fore.CYAN
+            suffix = colorama.Fore.RESET
+
+        utils.log(f"[{prefix}{self.gid}{suffix}] ", end="")
         for word in keywords:
             index = self.label.lower().find(word.lower())
             parts.append((index, index + len(word)))
@@ -63,13 +55,22 @@ class MatchResult:
                 if part_min <= index < part_max:
                     in_range = True
 
-            if in_range:
-                print(colorama.Fore.YELLOW, end="")
-            else:
-                print(colorama.Fore.RESET, end="")
-            print(char, end="")
+            if color_enabled:
+                if in_range:
+                    utils.log(colorama.Fore.YELLOW, end="")
+                else:
+                    utils.log(colorama.Fore.RESET, end="")
+            utils.log(char, end="")
 
-        print(f" {colorama.Fore.LIGHTBLUE_EX}{self.platform}{colorama.Fore.RESET}")
+        prefix = ""
+        suffix = ""
+        color_enabled = settings.get_color_enabled()
+
+        if color_enabled:
+            prefix = colorama.Fore.CYAN
+            suffix = colorama.Fore.RESET
+
+        utils.log(f" {prefix}{self.platform}{suffix}")
 
 
 def find_closest(

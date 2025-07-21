@@ -16,7 +16,7 @@ class BaseChoice:
         self.choices = choices
         self.default_response = default_response
 
-    def get_response(self, message) -> ChoiceResponse:
+    def get_response(self, message: str) -> ChoiceResponse:
         choices_string = "/".join([x for x in self.choices.keys()])
         response = input(f"{message} ({choices_string})\n> ")
         return self.choices.get(response, self.default_response)
@@ -28,7 +28,7 @@ class PressAnyKey(BaseChoice):
     ):
         BaseChoice.__init__(self, choices, default_response, *args, **kwargs)
 
-    def get_response(self, message) -> ChoiceResponse:
+    def get_response(self, message: str) -> ChoiceResponse:
         if message:
             print(message)
         os.system("pause")
@@ -48,5 +48,20 @@ _CHOICES = {
 }
 
 
-def prompt(message: str, choice_type: ChoiceType = ChoiceType.YES_NO) -> ChoiceResponse:
-    return _CHOICES[choice_type].get_response(message)
+def prompt(
+    message: str,
+    desired_choice: ChoiceResponse,
+    choice_type: ChoiceType = ChoiceType.YES_NO,
+) -> bool:
+    """
+
+    :param message: Message to display
+    :param desired_choice: If the result matches the desired choice this function will return True
+    :param choice_type: The choice type to use for the prompt
+    :return: bool
+    """
+    return _CHOICES[choice_type].get_response(message) == desired_choice
+
+
+def log(*args, **kwargs):
+    print(*args, **kwargs)
