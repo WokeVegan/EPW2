@@ -21,10 +21,9 @@ if __name__ == "__main__":
         help="Specify a platform to search.",
     )
     search_parser.add_argument(
-        "--partial",
-        default=False,
-        action="store_true",
-        help="Include partial matches. ex. 'old' will match 'golden'.",
+        "--ratio",
+        default=85,
+        help="Sets the minimum ratio for fuzzy searching. default: 85",
     )
     search_parser.set_defaults(action="search")
     download_parser = sub_parsers.add_parser("download")
@@ -54,7 +53,8 @@ if __name__ == "__main__":
     settings.create_template()
 
     if args.action == "search":
-        matches = matching.search(args.keywords, args.platform, args.partial)
+        matches = matching.search(args.keywords, args.ratio, args.platform)
+        matches.sort(key=lambda x: x.ratio, reverse=False)
         for result in matches:
             result.pretty_print(args.keywords)
 

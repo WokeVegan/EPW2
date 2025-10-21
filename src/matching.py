@@ -1,34 +1,18 @@
 import colorama
+from fuzzywuzzy import fuzz
 
 from src import database, utils
 from src import settings
 
 
-def all_of_a_in_b(a: list[str], b: list[str], partial: bool) -> bool:
-    a = [x.lower() for x in a]
-    b = [x.lower() for x in b]
-
-    if not partial:
-        return all([x in b for x in a])
-
-    matches = 0
-
-    for key_word in a:
-        for word in b:
-            if key_word in word:
-                matches += 1
-                break
-
-    return matches == len(a)
-
-
 class MatchResult:
-    __slots__ = ("gid", "label", "platform")
+    __slots__ = ("gid", "label", "platform", "ratio")
 
     def __init__(self, gid: int, label: str):
         self.gid = gid
         self.label = label
         self.platform = None
+        self.ratio = 0
 
     def pretty_print(self, keywords=None, nocolor=False):
         parts = []
@@ -74,29 +58,31 @@ class MatchResult:
 
 
 def find_closest(
-    search_term: list[str], plt: database.Platform, partial: bool
+    search_term: list[str], plt: database.Platform, minimum_ratio: int
 ) -> list[MatchResult]:
-    # TODO Add fuzzy search
     matches = []
     plt.load()
 
     for key, game_title in plt.items():
-        is_match = all_of_a_in_b(search_term, game_title.split(), partial)
-        if is_match:
+
+        ratio = fuzz.partial_ratio(
+            str("".join(search_term)).lower(), game_title.lower()
+        )
+
+        if ratio >= int(minimum_ratio):
             match_result = MatchResult(int(key), game_title)
             match_result.platform = plt.title
+            match_result.ratio = ratio
             matches.append(match_result)
 
     return matches
 
 
-def search(
-    keywords: list, platform: str = "", partial: bool = False
-) -> list[MatchResult]:
+def search(keywords: list, ratio: int, platform: str = "") -> list[MatchResult]:
     if not platform:
         matches = []
         for p in database.iter_platforms():
-            matches.extend(find_closest(keywords, p, partial))
+            matches.extend(find_closest(keywords, p, ratio))
         return matches
 
     for p in database.iter_platforms():
@@ -104,6 +90,6 @@ def search(
             p.title.upper(),
             *(alias.upper() for alias in p.aliases),
         ):
-            return find_closest(keywords, p, partial)
+            return find_closest(keywords, p, ratio)
 
     return []

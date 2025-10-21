@@ -2,7 +2,6 @@ import configparser
 import os
 import pathlib
 import platform
-import subprocess
 
 from src import database
 from src import utils
@@ -20,9 +19,7 @@ def get_default_directory() -> str:
 
 def open_in_editor() -> None:
     if platform.system() == "Windows":
-        subprocess.run([get_path()])
-    elif platform.system() == "Linux":
-        subprocess.run(["xdg-open", get_path()])
+        os.startfile(get_path())
 
 
 def create_template(restore: bool = False) -> None:

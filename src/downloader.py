@@ -18,6 +18,30 @@ from src import settings
 from src import utils
 
 
+async def gui_download(gid: int, chunk_size: int = 1024 * 2, override: str = None):
+
+    plt = database.get_platform_by_gid(int(gid))
+    url = plt.get_url(gid)
+    response = requests.get(url, headers={"referer": url}, stream=True)
+    filename = urllib.parse.unquote(response.url).split("/")[-1]
+    total_size = int(response.headers["Content-length"])
+
+    if override:
+        target_directory = override
+        file_destination = os.path.join(override, filename)
+    else:
+        platform_path = settings.get_platform_path(plt)
+        target_directory = platform_path
+        file_destination = os.path.join(platform_path, filename)
+
+    if not os.path.exists(target_directory):
+        os.makedirs(target_directory)
+
+    with open(file_destination, "wb") as f:
+        for chunk in response.iter_content(chunk_size):
+            f.write(chunk)
+
+
 def download(gid: int, chunk_size: int = 1024 * 2, override: str = None):
     """
     Downloads game based on gid.

@@ -10,11 +10,12 @@ Usage
 ### Requirements
 
 - Requires Python 3.6+
-  - colorama
-  - requests
-  - tqdm
-  - python-magic-bin
-  - py7zr
+    - colorama
+    - requests
+    - rich
+    - patool
+    - py7zr
+    - fuzzywuzzy
 
 ### Searching
 
@@ -22,56 +23,57 @@ You can search for games in the database files with the following commands.
 
 ```sh
 # Searches for castlevania in every platform.
-python epw.py search castlevania
-
-# Output ...
-Searching: 100%|██████████████████████████████| 60/60 [00:00<00:00, 242.27it/s]
-
-Showing 64 results for castlevania...
-[92824] Castlevania (1990)(Konami) Abandonware
-[70374] Castlevania (U) Commodore 64 Preservation Project
-[43269] Castlevania - Circle of the Moon (E)(Eurasia) Game Boy Advance
+> python epw.py search golden sun
+[43409] Golden Sun (U)(Mode7) Game Boy Advance
+[43542] Golden Sun (F)(Moleia) Game Boy Advance
+[43605] Golden Sun (G)(Koma) Game Boy Advance
 ...
 ```
 
 You can narrow the results by specifying a platform.
 
 ```sh
-# Only search the ps1 database.
-python epw.py search castlevania --platform "Sony Playstation"
-
-# Output ...
-Showing 5 results for castlevania...
-[36662] Castlevania - Chronicles [U] Sony Playstation
-[36663] Castlevania - Symphony of the Night [plus Music CD] [U] Sony Playstation
-[51896] Castlevania Chronicles (E) Sony Playstation
+> python epw.py search golden sun --platform gba
+[43409] Golden Sun (U)(Mode7) Game Boy Advance
+[43542] Golden Sun (F)(Moleia) Game Boy Advance
+[43605] Golden Sun (G)(Koma) Game Boy Advance
 ...
+```
+
+Search results are found by using fuzzy partial ratio. If results aren't showing, you can try lowering the ratio.
+The default ratio is 85. Lowering this value will result in much more matches being found.
+
+```sh
+> python epw.py search golden sun --ratio 75
 ```
 
 ### Downloading
 
 You can download the game by using the id provided from the search function on the far left in brackets. If you have
-`python-magic-bin` installed, you can extract `.zip` files after downloading. You can also extract `.7z` files if you
-`py7zr` installed.
+`patool` and `py7zr` installed, you will be prompted to extract files after downloading. You can auto extract files by
+setting `auto_extract` to `true` in the `settings.cfg` file.
 
 ```sh
 # Downloads the game with the id that search provided for us.
+> python epw.py download 44178
+Starting download 1 of 1
+Downloading 0940 - Golden Sun 2 - The Lost Age (U)(Megaroms).zip 100% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0:00:27 13.1/13.1 MB 302.1 kB/s
+File saved to 'C:\some\directory\0940 - Golden Sun 2 - The Lost Age (U)(Megaroms).zip'.
+Attempting to extract 0940 - Golden Sun 2 - The Lost Age (U)(Megaroms)...
+Files extracted to 'C:\some\directory'.
+```
 
-python epw.py download 46806  # This uses the default dir found in the settings.cfg
-python epw.py download 46806 -d "some/other/dir"  # override the default directory for this download
+You can download multiple files at once by providing multiple ids...
 
-Downloading '0735 - Castlevania - Portrait of Ruin (U)(XenoPhobia).7z'
-100%|█████████████████████████████████████| 22.6M/22.6M [00:03<00:00, 6.10MB/s]
-File saved to 'some/other/dir/0735 - Castlevania - Portrait of Ruin (U)(XenoPhobia).7z'.
-
-# If magic is found, you'll be asked if you want to extract the file.
-Would you like to extract the files? (Y/n): y
-Files extracted to 'some/other/dir/0735 - Castlevania - Portrait of Ruin (U)(XenoPhobia)'.
+```sh
+> python epw.py download 44178 44179
+Starting download 1 of 2
+...
 ```
 
 ### Settings
 
-When you run the script for the first time, if `settings.cfg` isn't found, the script will automatically regenerate one.
+When you run the script for the first time, if `settings.cfg` isn't found, the script will automatically create one.
 If you want to restore the file to its default values, or create a new file, you can use the command
 `python epw.py settings -r`.
 
@@ -81,3 +83,5 @@ platforms without a value will use `default`. You can leave these blank if you d
 
 In the `general` section, there is an option called `auto_extract`. You can set this to `true` or `false`. If this is
 set to `true`, then you will no longer get prompts to confirm file extraction.
+
+If your shell doesn't support colors. You can disable them by setting `color_enabled` to `false` in `settings.cfg`.
